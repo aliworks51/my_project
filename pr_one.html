@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر إلكتروني متكامل</title>
+    <style>
+        /* Reset CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        /* متغيرات الألوان */
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: var(--dark);
+        }
+        
+        /* الشريط العلوي */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem;
+            border-radius: 4px;
+        }
+        
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        /* قسم البحث */
+        .search-container {
+            background-color: var(--secondary);
+            padding: 1.5rem 0;
+        }
+        
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            background-color: white;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-box input {
+            flex: 1;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+        }
+        
+        .search-box button {
+            padding: 0 1.5rem;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .search-box button:hover {
+            background-color: #c0392b;
+        }
+        
+        /* المحتوى الرئيسي */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .section-title {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--secondary);
+            font-size: 1.5rem;
+        }
+        
+        /* المنتجات */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: var(--accent);
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .product-info {
+            padding: 1.2rem;
+        }
+        
+        .product-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .product-price {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+        }
+        
+        .product-rating {
+            color: #f39c12;
+            margin-bottom: 0.8rem;
+        }
+        
+        .add-to-cart {
+            width: 100%;
+            padding: 0.7rem;
+            background-color: var(--success);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .add-to-cart:hover {
+            background-color: #27ae60;
+        }
+        
+        /* سلة التسوق */
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 350px;
+            height: 100%;
+            background-color: white;
+            box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .cart-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .close-cart {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .cart-items {
+            padding: 1rem;
+        }
+        
+        .cart-item {
+            display: flex;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1rem;
+        }
+        
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-left: 1rem;
+        }
+        
+        .cart-item-details {
+            flex: 1;
+        }
+        
+        .cart-item-title {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+        
+        .cart-item-price {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .cart-item-remove {
+            color: #e74c3c;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .cart-total {
+            padding: 1rem;
+            border-top: 1px solid #eee;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+        
+        .checkout-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: var(--success);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .checkout-btn:hover {
+            background-color: #27ae60;
+        }
+        
+        /* التذييل */
+        footer {
+            background-color: var(--primary);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            padding: 0 1rem;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-section ul li a {
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-section ul li a:hover {
+            color: var(--secondary);
+        }
+        
+        .copyright {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* تأثيرات الحركة */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        /* التجاوب */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+            }
+            
+            .nav-links {
+                margin-top: 1rem;
+            }
+            
+            .nav-links li {
+                margin-left: 1rem;
+                margin-right: 0;
+            }
+            
+            .cart-modal {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- الشريط العلوي -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">متجرنا</div>
+            <ul class="nav-links">
+                <li><a href="#">الرئيسية</a></li>
+                <li><a href="#">المنتجات</a></li>
+                <li><a href="#">عروض خاصة</a></li>
+                <li><a href="#">اتصل بنا</a></li>
+                <li>
+                    <div class="cart-icon" id="cart-icon">
+                        🛒 <span class="cart-count" id="cart-count">0</span>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    
+    <!-- قسم البحث -->
+    <div class="search-container">
+        <div class="search-box">
+            <input type="text" placeholder="ابحث عن منتجات..." id="search-input">
+            <button id="search-button">بحث</button>
+        </div>
+    </div>
+
+    
+    <!-- المحتوى الرئيسي -->
+    <div class="container">
+        <h2 class="section-title">أحدث المنتجات</h2>
+        
+        <div class="products-grid">
+            <!-- المنتج 1 -->
+            <div class="product-card fade-in">
+                <span class="product-badge">جديد</span>
+                <img src="phone.jpg" alt="هاتف ذكي" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-title">هاتف ذكي - موديل 2023</h3>
+                    <div class="product-rating">★★★★★</div>
+                    <div class="product-price">2,499 ر.س</div>
+                    <button class="add-to-cart" data-id="1" data-name="هاتف ذكي" data-price="2499">أضف إلى السلة</button>
+                </div>
+            </div>
+            
+            <!-- المنتج 2 -->
+            <div class="product-card fade-in">
+                <span class="product-badge">عرض</span>
+                <img src="smart watch.jpg" alt="ساعة ذكية" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-title">ساعة ذكية للياقة البدنية</h3>
+                    <div class="product-rating">★★★★☆</div>
+                    <div class="product-price">899 ر.س</div>
+                    <button class="add-to-cart" data-id="2" data-name="ساعة ذكية" data-price="899">أضف إلى السلة</button>
+                </div>
+            </div>
+            
+            <!-- المنتج 3 -->
+            <div class="product-card fade-in">
+                <img src="airpods.jpg" alt="سماعات" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-title">سماعات لاسلكية</h3>
+                    <div class="product-rating">★★★★★</div>
+                    <div class="product-price">349 ر.س</div>
+                    <button class="add-to-cart" data-id="3" data-name="سماعات لاسلكية" data-price="349">أضف إلى السلة</button>
+                </div>
+            </div>
+            
+            <!-- المنتج 4 -->
+            <div class="product-card fade-in">
+                <img src="pc.png" alt="حاسوب محمول" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-title">حاسوب محمول</h3>
+                    <div class="product-rating">★★★★☆</div>
+                    <div class="product-price">3,799 ر.س</div>
+                    <button class="add-to-cart" data-id="4" data-name="حاسوب محمول" data-price="3799">أضف إلى السلة</button>
+                </div>
+            </div>
+            
+            <!-- المنتج 5 -->
+            <div class="product-card fade-in">
+                <span class="product-badge">الأكثر مبيعاً</span>
+                <img src="camira.avif" alt="كاميرا رقمية" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-title">كاميرا رقمية</h3>
+                    <div class="product-rating">★★★★★</div>
+                    <div class="product-price">1,599 ر.س</div>
+                    <button class="add-to-cart" data-id="5" data-name="كاميرا رقمية" data-price="1599">أضف إلى السلة</button>
+                </div>
+            </div>
+            
+            <!-- المنتج 6 -->
+            <div class="product-card fade-in">
+                <img src="clavier.avif" alt="لوحة مفاتيح" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-title">لوحة مفاتيح ميكانيكية</h3>
+                    <div class="product-rating">★★★☆☆</div>
+                    <div class="product-price">249 ر.س</div>
+                    <button class="add-to-cart" data-id="6" data-name="لوحة مفاتيح ميكانيكية" data-price="249">أضف إلى السلة</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- سلة التسوق -->
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-header">
+            <h3>سلة التسوق</h3>
+            <button class="close-cart" id="close-cart">×</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <!-- سيتم إضافة العناصر هنا عبر JavaScript -->
+        </div>
+        <div class="cart-total">
+            الإجمالي: <span id="cart-total-price">0</span> ر.س
+        </div>
+        <button class="checkout-btn">إتمام الشراء</button>
+    </div>
+    
+    <!-- التذييل -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>عن المتجر</h3>
+                <p>متجرنا الإلكتروني يوفر أحدث المنتجات بأفضل الأسعار.</p>
+            </div>
+            <div class="footer-section">
+                <h3>روابط سريعة</h3>
+                <ul>
+                    <li><a href="#">الرئيسية</a></li>
+                    <li><a href="#">المنتجات</a></li>
+                    <li><a href="#">عروض خاصة</a></li>
+                    <li><a href="#">اتصل بنا</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>وسائل التواصل</h3>
+                <ul>
+                    <li><a href="#">واتساب</a></li>
+                    <li><a href="#">إنستغرام</a></li>
+                    <li><a href="#">تويتر</a></li>
+                    <li><a href="#">البريد الإلكتروني</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2023 متجرنا الإلكتروني. جميع الحقوق محفوظة.
+        </div>
+    </footer>
+    <script>
+    // متغيرات سلة التسوق
+let cart = [];
+const cartModal = document.getElementById('cart-modal');
+const cartIcon = document.getElementById('cart-icon');
+const closeCart = document.getElementById('close-cart');
+const cartItemsContainer = document.getElementById('cart-items');
+const cartCount = document.getElementById('cart-count');
+const cartTotalPrice = document.getElementById('cart-total-price');
+const addToCartButtons = document.querySelectorAll('.add-to-cart');
+const searchInput = document.getElementById('search-input');
+const searchButton = document.getElementById('search-button');
+const productsGrid = document.getElementById('products-grid');
+const productCards = document.querySelectorAll('.product-card');
+
+// فتح/إغلاق سلة التسوق
+cartIcon.addEventListener('click', () => {
+    cartModal.style.display = 'block';
+});
+
+closeCart.addEventListener('click', () => {
+    cartModal.style.display = 'none';
+});
+
+// إضافة منتج إلى السلة
+addToCartButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const id = button.getAttribute('data-id');
+        const name = button.getAttribute('data-name');
+        const price = parseInt(button.getAttribute('data-price'));
+        const image = button.closest('.product-card').querySelector('.product-image').src; // الحصول على رابط الصورة
+
+        const existingItem = cart.find(item => item.id === id);
+
+        if (existingItem) {
+            existingItem.quantity++;
+        } else {
+            cart.push({
+                id,
+                name,
+                price,
+                image, // إضافة رابط الصورة
+                quantity: 1
+            });
+        }
+
+        updateCart();
+
+        // إظهار تأكيد الإضافة
+        alert(`تم إضافة ${name} إلى سلة التسوق`);
+    });
+});
+
+// تحديث سلة التسوق
+function updateCart() {
+    const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+    cartCount.textContent = totalItems;
+
+    cartItemsContainer.innerHTML = '';
+
+    if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p style="text-align: center;">سلة التسوق فارغة</p>';
+        cartTotalPrice.textContent = '0';
+        return;
+    }
+
+    let totalPrice = 0;
+
+    cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        totalPrice += itemTotal;
+
+        const cartItemElement = document.createElement('div');
+        cartItemElement.className = 'cart-item';
+        cartItemElement.innerHTML = `
+            <img src="${item.image}" alt="${item.name}" class="cart-item-image"> <!-- عرض الصورة -->
+            <div class="cart-item-details">
+                <h4 class="cart-item-title">${item.name}</h4>
+                <p class="cart-item-price">${item.price} ر.س × ${item.quantity} = ${itemTotal} ر.س</p>
+            </div>
+            <button class="cart-item-remove" data-id="${item.id}">✕</button>
+        `;
+
+        cartItemsContainer.appendChild(cartItemElement);
+    });
+
+    cartTotalPrice.textContent = totalPrice;
+
+    document.querySelectorAll('.cart-item-remove').forEach(button => {
+        button.addEventListener('click', () => {
+            const itemId = button.getAttribute('data-id');
+            cart = cart.filter(item => item.id !== itemId);
+            updateCart();
+        });
+    });
+}
+
+function performSearch() {
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            let foundResults = false;
+            
+            // إزالة رسالة "لا توجد نتائج" إذا كانت موجودة
+            const existingNoResults = document.querySelector('.no-results');
+            if (existingNoResults) {
+                existingNoResults.remove();
+            }
+            
+            productCards.forEach(card => {
+                const productName = card.getAttribute('data-name').toLowerCase();
+                const productCategory = card.getAttribute('data-category').toLowerCase();
+                
+                if (searchTerm === '' || 
+                    productName.includes(searchTerm) || 
+                    productCategory.includes(searchTerm)) {
+                    
+                    card.style.display = 'block';
+                    foundResults = true;
+                    
+                    // تمييز الكلمة المبحوث عنها
+                    if (searchTerm !== '') {
+                        const titleElement = card.querySelector('.product-title');
+                        const originalText = titleElement.textContent;
+                        const highlightedText = originalText.replace(
+                            new RegExp(searchTerm, 'gi'),
+                            match => `<span class="highlight">${match}</span>`
+                        );
+                        titleElement.innerHTML = highlightedText;
+                    }
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            if (!foundResults && searchTerm !== '') {
+                const noResults = document.createElement('div');
+                noResults.className = 'no-results';
+                noResults.textContent = 'لا توجد نتائج مطابقة للبحث';
+                productsGrid.appendChild(noResults);
+            }
+        }
+        
+        // البحث عند الضغط على زر البحث
+        searchButton.addEventListener('click', performSearch);
+        
+        // البحث عند الضغط على Enter
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+        
+        // إعادة تعيين البحث عند حذف النص
+        searchInput.addEventListener('input', function() {
+            if (this.value.trim() === '') {
+                performSearch();
+            }
+        });
+        
+        // تهيئة السلة
+        updateCart();console.log(searchInput); // Should log the search input element
+console.log(productCards); // Should log a NodeList of product cards
+// وظيفة البحث المعدلة
+function performSearch() {
+    const searchTerm = searchInput.value.trim().toLowerCase();
+    
+    // إزالة رسالة "لا توجد نتائج" السابقة إن وجدت
+    const existingNoResults = document.querySelector('.no-results');
+    if (existingNoResults) {
+        existingNoResults.remove();
+    }
+
+    let foundResults = false;
+    const productCards = document.querySelectorAll('.product-card');
+
+    productCards.forEach(card => {
+        const productName = card.querySelector('.product-title').textContent.toLowerCase();
+        
+        if (productName.includes(searchTerm) || searchTerm === '') {
+            card.style.display = 'block';
+            foundResults = true;
+        } else {
+            card.style.display = 'none';
+        }
+    });
+
+    if (!foundResults && searchTerm !== '') {
+        const noResults = document.createElement('div');
+        noResults.className = 'no-results';
+        noResults.textContent = 'لا توجد نتائج مطابقة للبحث';
+        productsGrid.appendChild(noResults);
+    }
+}
+
+// إضافة حدث البحث عند الضغط على زر البحث
+searchButton.addEventListener('click', performSearch);
+
+// إضافة حدث البحث عند الضغط على Enter
+searchInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        performSearch();
+    }
+});
+
+// إضافة حدث البحث أثناء الكتابة (بحث لحظي)
+searchInput.addEventListener('input', performSearch);
+</script>
+</body>
+</html>
